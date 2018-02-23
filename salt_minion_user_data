@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Get salt repo key
+wget -O - https://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest/SALTSTACK-GPG-KEY.pub | sudo apt-key add -
+
+# Add salt repo 
+sudo echo "deb http://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest xenial main" > /etc/apt/sources.list.d/saltstack.list
+
+# apt update
+sudo apt-get update
+
+# Install salt minion
+sudo apt-get -y install salt-minion
+
+sudo echo "master: ${salt_master_ip}" > /etc/salt/minion
+
+# Salt minion service restart
+sudo /etc/init.d/salt-minion restart
+
+### ADD
+# Install influxDB
+wget https://dl.influxdata.com/influxdb/releases/influxdb_1.4.2_amd64.deb
+
+sudo dpkg -i influxdb_1.4.2_amd64.deb
+
+service influxdb start
+
+# Install GRAFANA
+wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_4.6.3_amd64.deb
+
+sudo apt-get install -y adduser libfontconfig
+
+sudo dpkg -i grafana_4.6.3_amd64.deb
+
+grafana-cli plugins install grafana-piechart-panel
+
+service grafana-server start
