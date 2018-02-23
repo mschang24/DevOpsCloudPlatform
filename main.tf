@@ -1,4 +1,4 @@
-# Specify the provider and access details
+# Specify the provider and access details 
 provider "aws" {
   region = "ap-northeast-1"
 }
